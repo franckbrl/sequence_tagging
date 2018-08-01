@@ -124,7 +124,8 @@ def make_unks(vocab, vocab_freqs, p_unk):
     singletons = [w for w in vocab_freqs if vocab_freqs[w] == 1]
     unks = [w for w in singletons if random() < p_unk]
     vocab = [w for w in vocab if w not in unks]
-    return vocab
+    print("Word vocab reduced to {} tokens".format(len(vocab)))
+    return set(vocab)
 
 
 def get_char_vocab(dataset):
