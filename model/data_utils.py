@@ -1,5 +1,7 @@
 import numpy as np
 import os
+from random import random
+from collections import Counter
 
 
 # shared global variables to be imported from model also
@@ -102,14 +104,27 @@ def get_vocabs(datasets):
 
     """
     print("Building vocab...")
-    vocab_words = set()
+    #vocab_words = set()
+    vocab_freqs = Counter()
     vocab_tags = set()
-    for dataset in datasets:
-        for words, tags in dataset:
-            vocab_words.update(words)
-            vocab_tags.update(tags)
+    # get vocab only from train
+    dataset = datasets[0]
+    #for dataset in datasets:
+    for words, tags in dataset:
+        #vocab_words.update(words)
+        for word in words:
+            vocab_freqs[word] += 1
+        vocab_tags.update(tags)
+    vocab_words = set(vocab_freqs.keys())
     print("- done. {} tokens".format(len(vocab_words)))
-    return vocab_words, vocab_tags
+    return vocab_words, vocab_freqs, vocab_tags
+
+
+def make_unks(vocab, vocab_freqs, p_unk):
+    singletons = [w for w in vocab_freqs if vocab_freqs[w] == 1]
+    unks = [w for w in singletons if random() < p_unk]
+    vocab = [w for w in vocab if w not in unks]
+    return vocab
 
 
 def get_char_vocab(dataset):

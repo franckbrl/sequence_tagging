@@ -83,6 +83,7 @@ class Config():
     filename_words = "data/words.txt"
     filename_tags = "data/tags.txt"
     filename_chars = "data/chars.txt"
+    p_unk = 0.2
 
     # training
     train_embeddings = False
