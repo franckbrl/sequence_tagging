@@ -39,7 +39,8 @@ class Config():
         self.vocab_words = load_vocab(self.filename_words)
         self.vocab_tags  = load_vocab(self.filename_tags)
         self.vocab_chars = load_vocab(self.filename_chars)
-
+        self.vocab_singletons = load_vocab(self.filename_singletons)
+        
         self.nwords     = len(self.vocab_words)
         self.nchars     = len(self.vocab_chars)
         self.ntags      = len(self.vocab_tags)
@@ -47,6 +48,9 @@ class Config():
         # 2. get processing functions that map str -> id
         self.processing_word = get_processing_word(self.vocab_words,
                 self.vocab_chars, lowercase=True, chars=self.use_chars)
+        self.processing_word_unks = get_processing_word(self.vocab_words,
+                self.vocab_chars, lowercase=True, chars=self.use_chars,
+                singletons=self.vocab_singletons, p_unk=self.p_unk)
         self.processing_tag  = get_processing_word(self.vocab_tags,
                 lowercase=False, allow_unk=False)
 
@@ -79,7 +83,7 @@ class Config():
     filename_dev = "/home/lingua-nmt/franck/ner/en/conll-2003.test-a.en"
     filename_test = filename_dev
     filename_train = "/home/lingua-nmt/franck/ner/en/conll-kaggle.train.en"
-    p_unk = 0.2
+    p_unk = 0.5
 
     #filename_dev = filename_test = filename_train = "data/test.txt" # test
 
@@ -89,6 +93,7 @@ class Config():
     filename_words = dir_output + "data/words.txt"
     filename_tags = dir_output + "data/tags.txt"
     filename_chars = dir_output + "data/chars.txt"
+    filename_singletons = dir_output + "data/singletons.txt"
 
     # training
     train_embeddings = False

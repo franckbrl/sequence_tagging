@@ -33,13 +33,17 @@ def main():
     vocab_glove = get_glove_vocab(config.filename_glove)
 
     vocab = vocab_words & vocab_glove
-    vocab = make_unks(vocab, vocab_freqs, config.p_unk)
-    vocab.add(UNK)
+    #vocab = make_unks(vocab, vocab_freqs, config.p_unk)
+    #vocab.add(UNK)
     vocab.add(NUM)
+    vocab = [UNK] + list(vocab)
 
     # Save vocab
     write_vocab(vocab, config.filename_words)
     write_vocab(vocab_tags, config.filename_tags)
+    # get singletons
+    singletons = [k for k, v in vocab_freqs.iteritems() if v == 1]
+    write_vocab(singletons, config.filename_singletons)
 
     # Trim GloVe Vectors
     vocab = load_vocab(config.filename_words)

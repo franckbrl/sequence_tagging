@@ -251,7 +251,7 @@ def get_trimmed_glove_vectors(filename):
 
 
 def get_processing_word(vocab_words=None, vocab_chars=None,
-                    lowercase=False, chars=False, allow_unk=True):
+                        lowercase=False, chars=False, allow_unk=True, singletons=None, p_unk=0.0):
     """Return lambda function that transform a word (string) into list,
     or tuple of (list, id) of int corresponding to the ids of the word and
     its corresponding characters.
@@ -282,6 +282,12 @@ def get_processing_word(vocab_words=None, vocab_chars=None,
         # 2. get id of word
         if vocab_words is not None:
             if word in vocab_words:
+                
+                # insert unks for training
+                if singletons and word in singletons:
+                    if random() < p_unk:
+                        word = UNK
+                
                 word = vocab_words[word]
             else:
                 if allow_unk:
