@@ -42,7 +42,7 @@ def main():
     write_vocab(vocab, config.filename_words)
     write_vocab(vocab_tags, config.filename_tags)
     # get singletons
-    singletons = [k for k, v in vocab_freqs.iteritems() if v == 1]
+    singletons = [k for k, v in vocab_freqs.items() if v == 1]
     write_vocab(singletons, config.filename_singletons)
 
     # Trim GloVe Vectors
